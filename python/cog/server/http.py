@@ -25,6 +25,8 @@ from typing import (
 if TYPE_CHECKING:
     from typing import ParamSpec
 
+from fastapi.middleware.cors import CORSMiddleware
+
 import attrs
 import structlog
 import uvicorn
@@ -112,6 +114,15 @@ def create_app(
         # version=None # TODO
     )
 
+    # add CORS
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    
     app.state.health = Health.STARTING
     app.state.setup_task = None
     app.state.setup_result = None
